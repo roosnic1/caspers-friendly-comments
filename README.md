@@ -46,7 +46,6 @@ npx prisma migrate dev --name init
 
 When `npx prisma migrate dev` is executed against a newly created database, seeding is also triggered. The seed file in [`prisma/seed.ts`](./prisma/seed.ts) will be executed and your database will be populated with the sample data.
 
-
 ### 3. Start the REST API server
 
 ```
@@ -61,37 +60,37 @@ You can access the REST API of the server using the following endpoints:
 
 ### `GET`
 
-- `/post/:id`: Fetch a single post by its `id`
-- `/feed?searchString={searchString}&take={take}&skip={skip}&orderBy={orderBy}`: Fetch all _published_ posts
-  - Query Parameters
-    - `searchString` (optional): This filters posts by `title` or `content`
-    - `take` (optional): This specifies how many objects should be returned in the list
-    - `skip` (optional): This specifies how many of the returned objects in the list should be skipped
-    - `orderBy` (optional): The sort order for posts in either ascending or descending order. The value can either `asc` or `desc`
-- `/user/:id/drafts`: Fetch user's drafts by their `id`
-- `/users`: Fetch all users
+-   `/post/:id`: Fetch a single post by its `id`
+-   `/feed?searchString={searchString}&take={take}&skip={skip}&orderBy={orderBy}`: Fetch all _published_ posts
+    -   Query Parameters
+        -   `searchString` (optional): This filters posts by `title` or `content`
+        -   `take` (optional): This specifies how many objects should be returned in the list
+        -   `skip` (optional): This specifies how many of the returned objects in the list should be skipped
+        -   `orderBy` (optional): The sort order for posts in either ascending or descending order. The value can either `asc` or `desc`
+-   `/user/:id/drafts`: Fetch user's drafts by their `id`
+-   `/users`: Fetch all users
+
 ### `POST`
 
-- `/post`: Create a new post
-  - Body:
-    - `title: String` (required): The title of the post
-    - `content: String` (optional): The content of the post
-    - `authorEmail: String` (required): The email of the user that creates the post
-- `/signup`: Create a new user
-  - Body:
-    - `email: String` (required): The email address of the user
-    - `name: String` (optional): The name of the user
-    - `postData: PostCreateInput[]` (optional): The posts of the user
+-   `/post`: Create a new post
+    -   Body:
+        -   `title: String` (required): The title of the post
+        -   `content: String` (optional): The content of the post
+        -   `authorEmail: String` (required): The email of the user that creates the post
+-   `/signup`: Create a new user
+    -   Body:
+        -   `email: String` (required): The email address of the user
+        -   `name: String` (optional): The name of the user
+        -   `postData: PostCreateInput[]` (optional): The posts of the user
 
 ### `PUT`
 
-- `/publish/:id`: Toggle the publish value of a post by its `id`
-- `/post/:id/views`: Increases the `viewCount` of a `Post` by one `id`
+-   `/publish/:id`: Toggle the publish value of a post by its `id`
+-   `/post/:id/views`: Increases the `viewCount` of a `Post` by one `id`
 
 ### `DELETE`
 
-- `/post/:id`: Delete a post by its `id`
-
+-   `/post/:id`: Delete a post by its `id`
 
 ## Evolving the app
 
@@ -155,21 +154,21 @@ Update your `index.ts` file by adding a new endpoint to your API:
 
 ```ts
 app.post('/user/:id/profile', async (req, res) => {
-  const { id } = req.params
-  const { bio } = req.body
+    const { id } = req.params
+    const { bio } = req.body
 
-  const profile = await prisma.profile.create({
-    data: {
-      bio,
-      user: {
-        connect: {
-          id: Number(id)
-        }
-      }
-    }
-  })
+    const profile = await prisma.profile.create({
+        data: {
+            bio,
+            user: {
+                connect: {
+                    id: Number(id),
+                },
+            },
+        },
+    })
 
-  res.json(profile)
+    res.json(profile)
 })
 ```
 
@@ -179,10 +178,9 @@ Restart your application server and test out your new endpoint.
 
 ##### `POST`
 
-- `/user/:id/profile`: Create a new profile based on the user id
-  - Body:
-    - `bio: String` : The bio of the user
-
+-   `/user/:id/profile`: Create a new profile based on the user id
+    -   Body:
+        -   `bio: String` : The bio of the user
 
 <details><summary>Expand to view more sample Prisma Client queries on <code>Profile</code></summary>
 
@@ -192,12 +190,12 @@ Here are some more sample Prisma Client queries on the new <code>Profile</code> 
 
 ```ts
 const profile = await prisma.profile.create({
-  data: {
-    bio: 'Hello World',
-    user: {
-      connect: { email: 'alice@prisma.io' },
+    data: {
+        bio: 'Hello World',
+        user: {
+            connect: { email: 'alice@prisma.io' },
+        },
     },
-  },
 })
 ```
 
@@ -205,15 +203,15 @@ const profile = await prisma.profile.create({
 
 ```ts
 const user = await prisma.user.create({
-  data: {
-    email: 'john@prisma.io',
-    name: 'John',
-    profile: {
-      create: {
-        bio: 'Hello World',
-      },
+    data: {
+        email: 'john@prisma.io',
+        name: 'John',
+        profile: {
+            create: {
+                bio: 'Hello World',
+            },
+        },
     },
-  },
 })
 ```
 
@@ -221,14 +219,14 @@ const user = await prisma.user.create({
 
 ```ts
 const userWithUpdatedProfile = await prisma.user.update({
-  where: { email: 'alice@prisma.io' },
-  data: {
-    profile: {
-      update: {
-        bio: 'Hello Friends',
-      },
+    where: { email: 'alice@prisma.io' },
+    data: {
+        profile: {
+            update: {
+                bio: 'Hello Friends',
+            },
+        },
     },
-  },
 })
 ```
 
@@ -236,7 +234,7 @@ const userWithUpdatedProfile = await prisma.user.update({
 
 ## Switch to another database (e.g. PostgreSQL, MySQL, SQL Server, MongoDB)
 
-If you want to try this example with another database than SQLite, you can adjust the the database connection in [`prisma/schema.prisma`](./prisma/schema.prisma) by reconfiguring the `datasource` block. 
+If you want to try this example with another database than SQLite, you can adjust the the database connection in [`prisma/schema.prisma`](./prisma/schema.prisma) by reconfiguring the `datasource` block.
 
 Learn more about the different connection configurations in the [docs](https://www.prisma.io/docs/reference/database-reference/connection-urls).
 
@@ -303,6 +301,7 @@ datasource db {
   url      = "mongodb://USERNAME:PASSWORD@HOST/DATABASE?authSource=admin&retryWrites=true&w=majority"
 }
 ```
+
 Because MongoDB is currently in [Preview](https://www.prisma.io/docs/about/releases#preview), you need to specify the `previewFeatures` on your `generator` block:
 
 ```
@@ -311,11 +310,12 @@ generator client {
   previewFeatures = ["mongodb"]
 }
 ```
+
 </details>
 
 ## Next steps
 
-- Check out the [Prisma docs](https://www.prisma.io/docs)
-- Share your feedback in the [`prisma2`](https://prisma.slack.com/messages/CKQTGR6T0/) channel on the [Prisma Slack](https://slack.prisma.io/)
-- Create issues and ask questions on [GitHub](https://github.com/prisma/prisma/)
-- Watch our biweekly "What's new in Prisma" livestreams on [Youtube](https://www.youtube.com/channel/UCptAHlN1gdwD89tFM3ENb6w)
+-   Check out the [Prisma docs](https://www.prisma.io/docs)
+-   Share your feedback in the [`prisma2`](https://prisma.slack.com/messages/CKQTGR6T0/) channel on the [Prisma Slack](https://slack.prisma.io/)
+-   Create issues and ask questions on [GitHub](https://github.com/prisma/prisma/)
+-   Watch our biweekly "What's new in Prisma" livestreams on [Youtube](https://www.youtube.com/channel/UCptAHlN1gdwD89tFM3ENb6w)
