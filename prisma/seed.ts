@@ -2,59 +2,28 @@ import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const userData: Prisma.UserCreateInput[] = [
+const articleData: Prisma.ArticleCreateInput[] = [
     {
-        name: 'Alice',
-        email: 'alice@prisma.io',
-        posts: {
-            create: [
-                {
-                    title: 'Join the Prisma Slack',
-                    content: 'https://slack.prisma.io',
-                    published: true,
-                },
-            ],
-        },
+        title: 'Article 1',
+        content: 'Hello this is an article',
     },
     {
-        name: 'Nilu',
-        email: 'nilu@prisma.io',
-        posts: {
-            create: [
-                {
-                    title: 'Follow Prisma on Twitter',
-                    content: 'https://www.twitter.com/prisma',
-                    published: true,
-                },
-            ],
-        },
+        title: 'Article 2',
+        content: 'Hello this is another article',
     },
     {
-        name: 'Mahmoud',
-        email: 'mahmoud@prisma.io',
-        posts: {
-            create: [
-                {
-                    title: 'Ask a question about Prisma on GitHub',
-                    content: 'https://www.github.com/prisma/prisma/discussions',
-                    published: true,
-                },
-                {
-                    title: 'Prisma on YouTube',
-                    content: 'https://pris.ly/youtube',
-                },
-            ],
-        },
+        title: 'Article 3',
+        content: 'Hello this is the third article',
     },
 ]
 
 async function main() {
     console.log(`Start seeding ...`)
-    for (const u of userData) {
-        const user = await prisma.user.create({
-            data: u,
+    for (const a of articleData) {
+        const article = await prisma.article.create({
+            data: a,
         })
-        console.log(`Created user with id: ${user.id}`)
+        console.log(`Created user with id: ${article.id}`)
     }
     console.log(`Seeding finished.`)
 }
