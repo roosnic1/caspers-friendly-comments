@@ -1,5 +1,12 @@
-html
-    head
-        title= title
-    body
-        h1= message
+//- page-a.pug
+extends layout.pug
+
+block main
+    h1.font-bold.font-sans.break-normal.text-gray-900.pt-6.pb-2.text-3xl(class="md:text-4xl")= message
+    p.py-6 The following articles are available
+
+    ul
+        each article in articles
+            li.py-3= article
+
+
