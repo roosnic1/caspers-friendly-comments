@@ -1,0 +1,10 @@
+//- page-a.pug
+extends layout.pug
+
+block main
+    if !article
+        h1.font-bold.font-sans.break-normal.text-gray-900.pt-6.pb-2.text-3xl(class="md:text-4xl")= "Article not found"
+    else
+        h1.font-bold.font-sans.break-normal.text-gray-900.pt-6.pb-2.text-3xl(class="md:text-4xl")= article.title
+        p.py-6= article.content
+

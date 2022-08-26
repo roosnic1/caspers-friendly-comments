@@ -11,11 +11,22 @@ app.use(express.static('./public'))
 
 app.use('/api/v1/comment', commentApi)
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
+    const result = await prisma.article.findMany()
     res.render('index', {
         title: 'Hey',
         message: 'Hello there!',
-        articles: ['test1', 'test3', 'test5'],
+        articles: result,
+    })
+})
+
+app.get('/:articleID', async (req, res) => {
+    const { articleID } = req.params
+    const article = await prisma.article.findUnique({
+        where: { id: articleID },
+    })
+    res.render('article', {
+        article,
     })
 })
 
