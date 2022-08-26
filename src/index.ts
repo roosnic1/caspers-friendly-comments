@@ -26,7 +26,13 @@ app.get('/:articleID', async (req, res) => {
     const { articleID } = req.params
     const article = await prisma.article.findUnique({
         where: { id: articleID },
-        include: { comments: true },
+        include: {
+            comments: {
+                orderBy: {
+                    createdAt: 'desc',
+                },
+            },
+        },
     })
     res.render('article', {
         article,
