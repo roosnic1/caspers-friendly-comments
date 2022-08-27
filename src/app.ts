@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
+import ExpressWs from 'express-ws'
 import moment from 'moment'
 import commentApi from './commentApi'
 
@@ -10,7 +11,10 @@ const prisma = new PrismaClient({
         },
     },
 })
-const app = express()
+const baseApp = express()
+const appWs = ExpressWs(baseApp)
+
+const { app } = appWs
 
 app.set('view engine', 'pug')
 app.use(express.json())
@@ -42,6 +46,18 @@ app.get('/:articleID', async (req, res) => {
     })
     res.render('article', {
         article,
+    })
+})
+
+app.ws('/upvotes/:commentID', function (ws, req) {
+    const { commentID } = req.params
+    //TODO: check if comment exists
+    // @ts-ignore
+    ws.id = commentID
+    console.log('websocket', ws)
+    ws.on('message', function (msg: any) {
+        // @ts-ignore
+        ws.send(`ws ID: ${ws.id} message: ${msg}`)
     })
 })
 
