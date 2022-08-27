@@ -13,7 +13,7 @@ function submitComment(event) {
         }),
     })
         .then((data) => data.json())
-        .then((result) => {
+        .then(() => {
             form.reset()
             location.reload()
         })
