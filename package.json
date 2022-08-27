@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "license": "MIT",
     "scripts": {
+        "setup": "DATABASE_URL='file:./dev.db' prisma migrate dev",
         "dev": "DATABASE_URL='file:./dev.db' nodemon ./src/index.ts",
         "tailwind:css": "postcss styles/tailwind.css -o public/style.css",
         "test": "NODE_ENV=test DATABASE_URL='file:./test_dev.db' jest --testTimeout=10000",

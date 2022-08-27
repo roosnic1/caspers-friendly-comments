@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from '@prisma/client'
 const router = express.Router()
 const prisma = new PrismaClient()
 
-const FAMOUS_GHOST_NAMES = [
+export const FAMOUS_GHOST_NAMES = [
     'Casper the Friendly Ghost',
     'The Flying Dutchman',
     'Slimer',
