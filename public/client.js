@@ -1,7 +1,6 @@
-function submitComment(form, articleID) {
-    const commentText = form.children[0].value
-    console.log('text', commentText)
-    console.log('id', articleID)
+function submitComment(event) {
+    event.preventDefault()
+    const form = event.target
 
     fetch('/api/v1/comment', {
         method: 'POST',
@@ -9,8 +8,8 @@ function submitComment(form, articleID) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            articleID,
-            text: commentText,
+            articleID: form.name,
+            text: form.children[0].value,
         }),
     })
         .then((data) => data.json())
@@ -21,11 +20,11 @@ function submitComment(form, articleID) {
         .catch((error) => {
             console.warn('error while commenting', error)
         })
-    return true
 }
 
-function upvoteComment(commentID) {
-    fetch('/api/v1/comment/' + commentID + '/upvote', {
+function upvoteComment(event) {
+    event.preventDefault()
+    fetch('/api/v1/comment/' + event.target.name + '/upvote', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -33,7 +32,6 @@ function upvoteComment(commentID) {
     })
         .then((data) => data.json())
         .then((result) => {
-            console.log('upvote', result)
             const commentElement = document.getElementById(result.id)
             const upvoteElement =
                 commentElement.getElementsByClassName('commentUpvotes')[0]
@@ -46,9 +44,15 @@ function upvoteComment(commentID) {
         .catch((error) => {
             console.warn('error while upvoting', error)
         })
-    return true
 }
 
 window.onload = function () {
     console.log('ready')
+    const formElement = document.getElementById('commentForm')
+    formElement.addEventListener('submit', submitComment)
+
+    const upvoteButtonElements = document.getElementsByClassName('upvoteButton')
+    for (let upvoteButton of upvoteButtonElements) {
+        upvoteButton.addEventListener('click', upvoteComment)
+    }
 }
