@@ -16,7 +16,7 @@ export const FAMOUS_GHOST_NAMES = [
 ]
 
 router.post('/', async (req, res) => {
-    const { articleID, text } = req.body
+    const { articleID, text, parentCommentID } = req.body
     if (!articleID || !text)
         return res
             .status(400)
@@ -30,6 +30,9 @@ router.post('/', async (req, res) => {
                         Math.floor(Math.random() * FAMOUS_GHOST_NAMES.length)
                     ],
                 text,
+                ...(parentCommentID
+                    ? { parentComment: { connect: { id: parentCommentID } } }
+                    : {}),
             },
         })
         res.json(result)

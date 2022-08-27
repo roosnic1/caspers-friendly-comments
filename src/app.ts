@@ -38,8 +38,16 @@ app.get('/:articleID', async (req, res) => {
         where: { id: articleID },
         include: {
             comments: {
+                where: { parentCommentID: null },
                 orderBy: {
                     createdAt: 'desc',
+                },
+                include: {
+                    childComments: {
+                        orderBy: {
+                            createdAt: 'desc',
+                        },
+                    },
                 },
             },
         },

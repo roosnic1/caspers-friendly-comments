@@ -22,6 +22,18 @@ block main
                                         p.inline.commentUpvotes= comment.upvotes + ' ♥'
                                         button.ml-4.upvoteButton(name=comment.id) Like
                         p.mt-4.text-gray-500= comment.text
+                        if comment.childComments
+                            ul.mt-4
+                                each childComment in comment.childComments
+                                    li.relative.grid-grid-cols-1.gap-4.p-4.mb-4.border.rounded-lg.bg-white.shadow-lg(id=childComment.id)
+                                        div.relative.flex.gap-4
+                                            div.flex.flex-col.w-full
+                                                div.flex.flex-row.justify-between
+                                                    p.relative.text-xl.whitespace-nowrap.truncate.overflow-hidden= "at " + moment(childComment.createdAt).format('YYYY-MM-DD HH:mm') + " " + childComment.userName + " replied:"
+                                                    div
+                                                        p.inline.commentUpvotes= childComment.upvotes + ' ♥'
+                                                        button.ml-4.upvoteButton(name=childComment.id) Like
+                                        p.mt-4.text-gray-500= childComment.text
 
 
 block scripts

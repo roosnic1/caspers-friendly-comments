@@ -13,7 +13,7 @@ model Article {
   updatedAt DateTime  @updatedAt
   title     String
   content   String
-  comments   Comment[]
+  comments  Comment[]
 }
 
 model Comment {
@@ -25,4 +25,7 @@ model Comment {
   userName  String
   text      String
   upvotes   Int      @default(0)
+  parentComment Comment? @relation("ParentChild", fields: [parentCommentID], references: [id])
+  parentCommentID String?
+  childComments Comment[] @relation("ParentChild")
 }
