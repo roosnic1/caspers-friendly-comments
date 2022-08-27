@@ -1,7 +1,6 @@
 function submitComment(event) {
     event.preventDefault()
     const form = event.target
-
     fetch('/api/v1/comment', {
         method: 'POST',
         headers: {
@@ -10,6 +9,9 @@ function submitComment(event) {
         body: JSON.stringify({
             articleID: form.name,
             text: form.children[0].value,
+            ...(form.getAttribute('pcid')
+                ? { parentCommentID: form.getAttribute('pcid') }
+                : {}),
         }),
     })
         .then((data) => data.json())
@@ -48,8 +50,10 @@ function upvoteComment(event) {
 
 window.onload = function () {
     console.log('ready')
-    const formElement = document.getElementById('commentForm')
-    formElement.addEventListener('submit', submitComment)
+    const commentFormElements = document.getElementsByClassName('commentForm')
+    for (let commentForm of commentFormElements) {
+        commentForm.addEventListener('submit', submitComment)
+    }
 
     const upvoteButtonElements = document.getElementsByClassName('upvoteButton')
     for (let upvoteButton of upvoteButtonElements) {
