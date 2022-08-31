@@ -21,6 +21,7 @@ router.post('/', async (req, res) => {
         return res
             .status(400)
             .json({ error: 'articleID and text are required' })
+    // TODO: check if parentComment has the same articleID
     try {
         const result = await prisma.comment.create({
             data: {

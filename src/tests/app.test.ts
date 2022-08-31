@@ -46,7 +46,6 @@ describe('Post comment', () => {
     })
 
     it('POST /api/v1/comment should creat a comment', async () => {
-        console.log('articleID', articleIDS[0])
         const res = await requestWithSupertest.post('/api/v1/comment').send({
             articleID: articleIDS[0],
             text: 'Test comment',
@@ -76,6 +75,44 @@ describe('Post comment', () => {
             text: 'Test comment',
         })
         expect(res.status).toEqual(404)
+    })
+})
+
+describe('Post child comment', () => {
+    const comments: Comment[] = []
+
+    beforeAll(async () => {
+        const result = await prisma.comment.findMany({
+            where: { parentCommentID: null },
+        })
+        comments.push(...result)
+    })
+
+    it('POST /api/v1/comment should creat a child comment', async () => {
+        const parentComment = comments[0]
+        const childCommentText = 'Test child comment'
+        const res = await requestWithSupertest.post('/api/v1/comment').send({
+            articleID: parentComment.articleID,
+            parentCommentID: parentComment.id,
+            text: childCommentText,
+        })
+        expect(res.status).toEqual(200)
+        expect(res.type).toEqual(expect.stringContaining('json'))
+        expect(res.body).toHaveProperty('id')
+
+        const updatedParentComment = await prisma.comment.findUnique({
+            where: { id: parentComment.id },
+            include: {
+                childComments: true,
+            },
+        })
+
+        const childCommentID = res.body['id']
+        expect(
+            updatedParentComment?.childComments.find(
+                (comment) => comment.id === childCommentID
+            )?.text
+        ).toBe(childCommentText)
     })
 })
 

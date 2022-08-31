@@ -28,6 +28,12 @@ const comments: string[] = [
     'Bought this book as a present for my friend.',
 ]
 
+const childComments: string[] = [
+    'You are absolutely right',
+    'I disagree with you',
+    'Right?!?',
+]
+
 async function main() {
     console.log(`Start seeding ...`)
     for (const a of articleData) {
@@ -52,6 +58,26 @@ async function main() {
         })
         console.log(`Created comment with id: ${comment.id}`)
     }
+    const parentComments = await prisma.comment.findMany({
+        where: { parentCommentID: null },
+    })
+    for (const c of parentComments) {
+        const comment = await prisma.comment.create({
+            data: {
+                articleID: c.articleID,
+                text: childComments[
+                    Math.floor(Math.random() * childComments.length)
+                ],
+                userName:
+                    FAMOUS_GHOST_NAMES[
+                        Math.floor(Math.random() * FAMOUS_GHOST_NAMES.length)
+                    ],
+                parentCommentID: c.id,
+            },
+        })
+        console.log(`Created child comment with id: ${comment.id}`)
+    }
+
     console.log(`Seeding finished.`)
 }
 
