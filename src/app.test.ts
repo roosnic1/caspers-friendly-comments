@@ -1,4 +1,4 @@
-import server from '../app'
+import server from './app'
 import supertest from 'supertest'
 import { Comment, PrismaClient } from '@prisma/client'
 import { join } from 'path'
@@ -12,14 +12,7 @@ const prisma = new PrismaClient({
     },
 })
 
-const prismaBinary = join(
-    __dirname,
-    '..',
-    '..',
-    'node_modules',
-    '.bin',
-    'prisma'
-)
+const prismaBinary = join(__dirname, '..', 'node_modules', '.bin', 'prisma')
 
 beforeAll(() => {
     execSync(`${prismaBinary} db push --force-reset`, {
