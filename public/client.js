@@ -69,7 +69,7 @@ window.onload = function () {
         componentDidMount() {
             if (!document['__websocket']) {
                 document['__websocket'] = new WebSocket(
-                    `${location.protocol === 'https' ? 'wss' : 'ws'}://${
+                    `${location.protocol === 'https:' ? 'wss' : 'ws'}://${
                         location.host
                     }/ws`
                 )
