@@ -1,11 +1,12 @@
 {
-    "name": "rest-express",
+    "name": "caspers-friendly-comments",
     "version": "1.0.0",
     "license": "MIT",
     "scripts": {
         "setup": "DATABASE_URL='file:./dev.db' prisma migrate dev",
         "dev": "DATABASE_URL='file:./dev.db' nodemon index.ts",
         "clean": " rimraf ./dist",
+        "start": "node ./dist/index.js",
         "build": "run-s clean tailwind:css build:typescript copy",
         "build:typescript": "tsc",
         "copy": "run-s copy:views copy:public",
