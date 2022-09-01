@@ -4,7 +4,7 @@
     "license": "MIT",
     "scripts": {
         "setup": "DATABASE_URL='file:./dev.db' prisma migrate dev",
-        "dev": "DATABASE_URL='file:./dev.db' nodemon ./src/index.ts",
+        "dev": "DATABASE_URL='file:./dev.db' nodemon index.ts",
         "clean": " rimraf ./dist",
         "build": "run-s clean tailwind:css build:typescript copy",
         "build:typescript": "tsc",
