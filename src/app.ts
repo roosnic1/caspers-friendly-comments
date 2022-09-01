@@ -3,7 +3,7 @@ import express from 'express'
 import ExpressWs from 'express-ws'
 import moment from 'moment'
 import commentApi from './commentApi'
-
+import websocketMiddleware from './websocket'
 const prisma = new PrismaClient({
     datasources: {
         db: {
@@ -22,6 +22,7 @@ app.use(express.static('./public'))
 app.locals.moment = moment
 
 app.use('/api/v1/comment', commentApi)
+app.ws('/ws', websocketMiddleware)
 
 app.get('/', async (req, res) => {
     const result = await prisma.article.findMany()
@@ -54,18 +55,6 @@ app.get('/:articleID', async (req, res) => {
     })
     res.render('article', {
         article,
-    })
-})
-
-app.ws('/upvotes/:commentID', function (ws, req) {
-    const { commentID } = req.params
-    //TODO: check if comment exists
-    // @ts-ignore
-    ws.id = commentID
-    console.log('websocket', ws)
-    ws.on('message', function (msg: any) {
-        // @ts-ignore
-        ws.send(`ws ID: ${ws.id} message: ${msg}`)
     })
 })
 

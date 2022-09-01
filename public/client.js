@@ -1,3 +1,5 @@
+/* global React, ReactDOM */
+
 function submitComment(event) {
     event.preventDefault()
     const form = event.target
@@ -49,14 +51,98 @@ function upvoteComment(event) {
 }
 
 window.onload = function () {
-    console.log('ready')
     const commentFormElements = document.getElementsByClassName('commentForm')
     for (let commentForm of commentFormElements) {
         commentForm.addEventListener('submit', submitComment)
     }
 
-    const upvoteButtonElements = document.getElementsByClassName('upvoteButton')
-    for (let upvoteButton of upvoteButtonElements) {
-        upvoteButton.addEventListener('click', upvoteComment)
+    const e = React.createElement
+    class Upvote extends React.Component {
+        constructor(props) {
+            super(props)
+            this.state = {
+                upvotes: props.upvotes,
+                commentID: props.commentID,
+            }
+        }
+
+        componentDidMount() {
+            if (!document['__websocket']) {
+                document['__websocket'] = new WebSocket(
+                    `ws://${location.host}/ws`
+                )
+            }
+            this.ws = document['__websocket']
+            this.ws.addEventListener('open', () => {
+                this.ws.send(
+                    JSON.stringify({
+                        text: 'hello',
+                        commentID: this.state.commentID,
+                    })
+                )
+            })
+            this.ws.addEventListener('message', (event) => {
+                try {
+                    const data = JSON.parse(event.data)
+                    if (data.type === 'error') {
+                        console.warn(data.message)
+                    } else if (data.type === 'upvote') {
+                        if (data.commentID === this.state.commentID) {
+                            this.setState({
+                                ...this.state,
+                                upvotes: data.upvotes,
+                            })
+                        }
+                    } else {
+                        console.log('data', data)
+                    }
+                } catch (error) {
+                    console.error('could not parse server message', error)
+                }
+            })
+        }
+
+        upvote() {
+            this.ws.send(
+                JSON.stringify({
+                    type: 'upvote',
+                    commentID: this.state.commentID,
+                })
+            )
+        }
+
+        render() {
+            return [
+                e(
+                    'p',
+                    {
+                        className: 'inline commentUpvotes',
+                        key: 'upvoteDisplay',
+                    },
+                    `${this.state.upvotes} ♥`
+                ),
+                e(
+                    'button',
+                    {
+                        onClick: this.upvote.bind(this),
+                        className: 'ml-4 upvoteButton',
+                        key: 'upvoteButton',
+                    },
+                    'Like'
+                ),
+            ]
+        }
+    }
+
+    const upvoteDisplayElements =
+        document.getElementsByClassName('upvoteDisplay')
+    for (let upvoteDisplay of upvoteDisplayElements) {
+        const root = ReactDOM.createRoot(upvoteDisplay)
+        root.render(
+            e(Upvote, {
+                commentID: upvoteDisplay.getAttribute('name'),
+                upvotes: upvoteDisplay.getAttribute('upvotes'),
+            })
+        )
     }
 }

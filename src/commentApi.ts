@@ -48,26 +48,11 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/:commentID/upvote', async (req, res) => {
-    const { commentID } = req.params
-    if (!commentID)
-        return res.status(400).json({ error: 'commentID is required' })
-
-    try {
-        const result = await prisma.comment.update({
-            where: { id: commentID },
-            data: {
-                upvotes: { increment: 1 },
-            },
+    return res
+        .status(410)
+        .json({
+            error: 'API is deprecated. Please use websockets for comment upvotes',
         })
-        res.json(result)
-    } catch (error) {
-        const prismaError = error as Prisma.PrismaClientKnownRequestError
-        if (prismaError.code === 'P2025') {
-            res.status(404).json({ error: 'comment does not exist' })
-        } else {
-            res.status(500).json({ error: prismaError.message })
-        }
-    }
 })
 
 export default router

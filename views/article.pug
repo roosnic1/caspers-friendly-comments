@@ -18,9 +18,7 @@ block main
                             div.flex.flex-col.w-full
                                 div.flex.flex-row.justify-between
                                     p.relative.text-xl.whitespace-nowrap.truncate.overflow-hidden= "at " + moment(comment.createdAt).format('YYYY-MM-DD HH:mm') + " " + comment.userName + " wrote:"
-                                    div
-                                        p.inline.commentUpvotes= comment.upvotes + ' ♥'
-                                        button.ml-4.upvoteButton(name=comment.id) Like
+                                    div(name=comment.id, upvotes=comment.upvotes).upvoteDisplay
                         p.mt-4.text-gray-500= comment.text
                         form.commentForm.mt-4(name=article.id, pcid=comment.id)
                             textarea#message(rows="2" class="block p-2.5 w-full text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your reply..." required="required")
@@ -33,11 +31,11 @@ block main
                                             div.flex.flex-col.w-full
                                                 div.flex.flex-row.justify-between
                                                     p.relative.text-xl.whitespace-nowrap.truncate.overflow-hidden= "at " + moment(childComment.createdAt).format('YYYY-MM-DD HH:mm') + " " + childComment.userName + " replied:"
-                                                    div
-                                                        p.inline.commentUpvotes= childComment.upvotes + ' ♥'
-                                                        button.ml-4.upvoteButton(name=childComment.id) Like
+                                                    div(name=childComment.id, upvotes=childComment.upvotes).upvoteDisplay
                                         p.mt-4.text-gray-500= childComment.text
 
 
 block scripts
+    script(src='https://unpkg.com/react@18/umd/react.development.js' crossorigin=true)
+    script(src='https://unpkg.com/react-dom@18/umd/react-dom.development.js' crossorigin=true)
     script(src='/client.js')
