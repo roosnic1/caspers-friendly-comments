@@ -550,6 +550,9 @@ video {
     margin-left: auto;
     margin-right: auto;
 }
+.ml-4 {
+    margin-left: 1rem;
+}
 .mt-6 {
     margin-top: 1.5rem;
 }
@@ -565,9 +568,6 @@ video {
 .mb-2 {
     margin-bottom: 0.5rem;
 }
-.ml-4 {
-    margin-left: 1rem;
-}
 .block {
     display: block;
 }
@@ -579,38 +579,6 @@ video {
 }
 .w-full {
     width: 100%;
-}
-@-webkit-keyframes bounce {
-    0%,
-    100% {
-        transform: translateY(-25%);
-        -webkit-animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-    }
-
-    50% {
-        transform: none;
-        -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    }
-}
-@keyframes bounce {
-    0%,
-    100% {
-        transform: translateY(-25%);
-        -webkit-animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-    }
-
-    50% {
-        transform: none;
-        -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    }
-}
-.animate-bounce {
-    -webkit-animation: bounce 1s infinite;
-    animation: bounce 1s infinite;
 }
 @-webkit-keyframes pulse {
     50% {
