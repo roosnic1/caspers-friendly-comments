@@ -19,7 +19,7 @@ npm install
 
 ### 2. Create and seed the database
 
-Run the setup command to create the database and seed it
+Create a file `.env` in the root directory and add `DATABASE_URL=%POSTGRESQL-CONNECTION%`. Run the setup command to create the database and seed it
 
 ```
 npm run setup
