@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -17,15 +17,15 @@ model Article {
 }
 
 model Comment {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  article   Article  @relation(fields: [articleID], references: [id])
-  articleID String
-  userName  String
-  text      String
-  upvotes   Int      @default(0)
-  parentComment Comment? @relation("ParentChild", fields: [parentCommentID], references: [id])
+  id              String    @id @default(uuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  articleID       String
+  userName        String
+  text            String
+  upvotes         Int       @default(0)
   parentCommentID String?
-  childComments Comment[] @relation("ParentChild")
+  article         Article   @relation(fields: [articleID], references: [id])
+  parentComment   Comment?  @relation("ParentChild", fields: [parentCommentID], references: [id])
+  childComments   Comment[] @relation("ParentChild")
 }

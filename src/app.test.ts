@@ -1,8 +1,6 @@
 import server from './app'
 import supertest from 'supertest'
 import { Comment, PrismaClient } from '@prisma/client'
-import { join } from 'path'
-import { execSync } from 'child_process'
 const requestWithSupertest = supertest(server)
 const prisma = new PrismaClient({
     datasources: {
@@ -10,24 +8,6 @@ const prisma = new PrismaClient({
             url: process.env.DATABASE_URL,
         },
     },
-})
-
-const prismaBinary = join(__dirname, '..', 'node_modules', '.bin', 'prisma')
-
-beforeAll(() => {
-    execSync(`${prismaBinary} db push --force-reset`, {
-        env: {
-            ...process.env,
-            DATABASE_URL: 'file:./test_dev.db',
-        },
-    })
-
-    execSync(`${prismaBinary} db seed`, {
-        env: {
-            ...process.env,
-            DATABASE_URL: 'file:./test_dev.db',
-        },
-    })
 })
 
 describe('Post comment', () => {
@@ -109,7 +89,7 @@ describe('Post child comment', () => {
     })
 })
 
-describe('Upvote comment', () => {
+xdescribe('Upvote comment', () => {
     const comments: Comment[] = []
 
     beforeAll(async () => {
